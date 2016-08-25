@@ -46,13 +46,35 @@ function updateBackgroundPhoto(nsid) {
   var url = getURLForAPI(method);
 
   url += "&user_id=" + nsid;
-  url += "&per_page=16&extras=url_h";
+  url += "&per_page=16&extras=url_h,geo,owner_name";
 
   $.getJSON(url).done(function(data) {
     var photoArray = data["photos"]["photo"];
     var arrayIndex = Math.floor(Math.random() * photoArray.length);
     var photo = photoArray[arrayIndex];
     $("#background-image").attr("src", photo["url_h"]);
+    updateAttribution(photo);
+  })
+}
+
+function updateAttribution(photo) {
+  var title = photo["title"]
+  var owner = photo["ownername"];
+  var placeID = photo["place_id"];
+
+  if (placeID == null) {
+    $(".attribution").html("<p>" + title + " taken by " + owner + "</p>");
+    return;
+  }
+
+  var method = "flickr.places.getInfo";
+  var url = getURLForAPI(method);
+  url += "&place_id=" + placeID;
+
+  $.getJSON(url).done(function(data) {
+    var place = data["place"].name
+
+    $(".attribution").html("<p>" + title + " taken by " + owner + "</p><p><em>" + place + "</em></p>");
   })
 }
 

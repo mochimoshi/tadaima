@@ -26,35 +26,64 @@ $(document).ready(function() {
 });
 
 function getIDForUsername(username) {
-  var method = "flickr.people.findByUsername";
-  var url = getURLForAPI(method);
-  url += "&username=" + username;
+  var usernameKey = "username~" + username
   
-  $.getJSON(url).done(function(data) {
-    var userNSID = data["user"]["nsid"];
-    chrome.storage.sync.set({
-      "flickrUsername": username,
-      "flickrUserNSID": userNSID
-    }, function() {
-      updateBackgroundPhoto(userNSID);
-    });
+  chrome.storage.local.get(usernameKey, function(data) {
+    if (data[usernameKey] != null) {
+      updateBackgroundPhoto(data[usernameKey]);
+    } else {
+      var method = "flickr.people.findByUsername";
+      var url = getURLForAPI(method);
+      url += "&username=" + username;
+      
+      $.getJSON(url).done(function(data) {
+        var userNSID = data["user"]["nsid"];
+        var localUsernameStoredObject = {};
+        localUsernameStoredObject[usernameKey] = userNSID;
+
+        chrome.storage.local.set(localUsernameStoredObject)
+        chrome.storage.sync.set({
+          "flickrUsername": username,
+          "flickrUserNSID": userNSID
+        }, function() {
+          updateBackgroundPhoto(userNSID);
+        });
+      });
+    }
   });
 }
 
 function updateBackgroundPhoto(nsid) {
-  var method = "flickr.people.getPublicPhotos";
-  var url = getURLForAPI(method);
+  var photosKey = "photos~" + nsid;
 
-  url += "&user_id=" + nsid;
-  url += "&per_page=16&extras=url_h,geo,owner_name";
+  chrome.storage.local.get(photosKey, function(data) {
+    if (data[photosKey] != null) {
+      var photoArray = data[photosKey];
+      var arrayIndex = Math.floor(Math.random() * photoArray.length);
+      var photo = photoArray[arrayIndex];
+      $("#background-image").attr("src", photo["url_h"]);
+      updateAttribution(photo);
+    } else {
+      var method = "flickr.people.getPublicPhotos";
+      var url = getURLForAPI(method);
 
-  $.getJSON(url).done(function(data) {
-    var photoArray = data["photos"]["photo"];
-    var arrayIndex = Math.floor(Math.random() * photoArray.length);
-    var photo = photoArray[arrayIndex];
-    $("#background-image").attr("src", photo["url_h"]);
-    updateAttribution(photo);
-  })
+      url += "&user_id=" + nsid;
+      url += "&per_page=64&extras=url_h,geo,owner_name";
+
+      $.getJSON(url).done(function(data) {
+        var photoArray = data["photos"]["photo"];
+        var arrayIndex = Math.floor(Math.random() * photoArray.length);
+        var photo = photoArray[arrayIndex];
+        $("#background-image").attr("src", photo["url_h"]);
+        updateAttribution(photo);
+
+        var localPhotosStoredObject = {};
+        localPhotosStoredObject[photosKey] = photoArray;
+
+        chrome.storage.local.set(localPhotosStoredObject);
+      });
+    }
+  });
 }
 
 function updateAttribution(photo) {
@@ -67,14 +96,26 @@ function updateAttribution(photo) {
     return;
   }
 
-  var method = "flickr.places.getInfo";
-  var url = getURLForAPI(method);
-  url += "&place_id=" + placeID;
+  var placeIDKey = "placeID~" + placeID;
+  chrome.storage.local.get(placeIDKey, function(data) {
+    if (data[placeIDKey] != null) {
+      $(".attribution").html("<p>" + title + " taken by " + owner + "</p><p><em>" + place + "</em></p>");
+    } else {
+      var method = "flickr.places.getInfo";
+      var url = getURLForAPI(method);
+      url += "&place_id=" + placeID;
 
-  $.getJSON(url).done(function(data) {
-    var place = data["place"].name
+      $.getJSON(url).done(function(data) {
+        var place = data["place"].name;
+        
+        var localPlaceStoredObject = {};
+        localPlaceStoredObject[placeIDKey] = place;
 
-    $(".attribution").html("<p>" + title + " taken by " + owner + "</p><p><em>" + place + "</em></p>");
+        chrome.storage.local.set(localPlaceStoredObject);
+
+        $(".attribution").html("<p>" + title + " taken by " + owner + "</p><p><em>" + place + "</em></p>");
+      });
+    }
   })
 }
 

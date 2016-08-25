@@ -1,5 +1,7 @@
-# tadaima
+# ただいま
 Welcome home
+
+![おはようございます](/img/sample.jpg?raw=true)
 
 This has a list of quick links to frequently accessed tools and loads a random photo from a Flickr username that you specify.
 

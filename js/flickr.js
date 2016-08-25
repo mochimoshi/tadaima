@@ -3,7 +3,13 @@ var format = "json";
 var rootURL = "https://api.flickr.com/services/rest/?";
 
 $(document).ready(function() {
-  getIDForUsername("thepianistalex");
+  chrome.storage.sync.get("flickrUserNSID", function(data) {
+    if (data["flickrUserNSID"] != null) {
+      updateBackgroundPhoto(data["flickrUserNSID"]);
+    } else {
+      getIDForUsername("thepianistalex");
+    }
+  })
 
   $("#settings-nav").click(function() {
     $(".settings-body").css("display", "block");
@@ -40,7 +46,7 @@ function updateBackgroundPhoto(nsid) {
   var url = getURLForAPI(method);
 
   url += "&user_id=" + nsid;
-  url += "&per_page=10&extras=url_h";
+  url += "&per_page=16&extras=url_h";
 
   $.getJSON(url).done(function(data) {
     var photoArray = data["photos"]["photo"];

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<head>
+  <title>New Tab</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" href="https://yui-s.yahooapis.com/pure/0.6.0/base-min.css">
+  <link rel="stylesheet" href="https://yui-s.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+  <link rel="stylesheet" href="https://yui-s.yahooapis.com/pure/0.6.0/buttons-min.css">
+  <link rel="stylesheet" href="https://yui-s.yahooapis.com/pure/0.6.0/menus-min.css">
+  <link rel="stylesheet" href="https://yui-s.yahooapis.com/pure/0.6.0/forms-min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
+</head>
+<body>
+  <div class="pure-u-1 index-background">
+    <span class="fade-in-image"><img id="background-image" src="https://c1.staticflickr.com/9/8535/28572750414_2d801949eb_k.jpg" /></span>
+  </div>
+  <div class="pure-u-1 pure-u-sm-1-3 pure-u-md-1-6 pure-u-lg-1-8 full-height overlay-bar">
+    <div class="vertical-padded-wrapper">
+      <div class="pure-menu">
+        <span class="pure-menu-heading">Quick Links</span>
+
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item"><a href="https://google.com" class="pure-menu-link">Google</a></li>
+            <li class="pure-menu-item"><a href="https://gmail.com" class="pure-menu-link">Gmail</a></li>
+            <li class="pure-menu-item"><a href="https://maps.google.com" class="pure-menu-link">Maps</a></li>
+            <li class="pure-menu-item"><a href="https://calendar.google.com" class="pure-menu-link">Calendar</a></li>
+            <li class="pure-menu-heading">Work</li>
+            <li class="pure-menu-item"><a href="https://github.com" class="pure-menu-link">Github</a></li>
+            <li class="pure-menu-item"><a href="https://coursera.org" class="pure-menu-link">Coursera</a></li>
+            <li class="pure-menu-heading">Other</li>
+            <li class="pure-menu-item"><a href="https://messenger.com" class="pure-menu-link">Messenger</a></li>
+            <li class="pure-menu-item"><a href="https://flickr.com" class="pure-menu-link">Flickr</a></li>
+            <li class="pure-menu-item"><a href="#"" class="pure-menu-link" id="settings-nav">Settings</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="pure-u-1 centered-body main-body">
+    <h1>Let's get things done today</h1>
+  </div>
+  <div class="pure-u-1 centered-body settings-body">
+    <form class="pure-form pure-form-stacked">
+    <fieldset>
+      <legend>Settings</legend>
+      <label for="flickr-username-input">Flickr Username</label>
+      <input id="flickr-username-input" type="text" placeholder="Moshitea" class="pure-input-1 classy-input">
+
+      <button type="submit" class="pure-button pure-button-primary" id="save-settings">Save</button>
+    </form>
+  </div>
+  <script src="js/jquery-3.1.0.min.js"></script>
+  <script src="js/flickr.js"></script>
+</body>

@@ -1,0 +1,106 @@
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #000;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', 'Helvetica Neue', helvetica, trebuchet, sans-serif;
+  color: #fff;
+  height: 100%;
+  font-weight: 300;
+  line-height: 1.6;
+  font-size: 100%;
+}
+
+p {
+  font-size: 1.125em;
+}
+
+.full-height {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.centered-body {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  text-align: center;
+}
+
+.main-body {
+  z-index: 2;
+}
+
+.settings-body {
+  z-index: 4;
+  background-color: rgba(0,0,0,0.6);
+  padding: 16px;
+  display: none;
+}
+
+.index-background {
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  z-index: -3;
+}
+
+.index-background img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: auto;
+  height: auto;
+  min-width: 50%;
+  min-height: 50%;
+  opacity: 0.6;
+}
+
+.vertical-padded-wrapper {
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+
+.overlay-bar {
+  background-color: rgba(0,0,0,0.6);
+  z-index: 10;
+}
+
+.classy-input {
+  color: #111;
+}
+
+/* Overriding styles */
+.pure-menu-link {
+  color: #ddd;
+}
+.pure-menu-heading {
+  color: #bbb;
+}
+
+.pure-menu-active > .pure-menu-link,
+.pure-menu-link:hover,
+.pure-menu-link:focus {
+  background-color: rgba(50,50,50,0.7);
+}
+
+.pure-menu-selected .pure-menu-link,
+.pure-menu-selected .pure-menu-link:visited {
+  color: #aaa;
+}
+
+.pure-form legend {
+  color: #bbb;
+}

@@ -1,0 +1,12 @@
+{
+  "manifest_version": 2,
+  "name": "ただいま • Tadaima",
+  "version": "0.0.1",
+  "description": "Welcome back to your home",
+  "chrome_url_overrides" : {
+    "newtab": "index.html"
+  },
+  "short_name": "Tadaima",
+  "permissions" : ["sessions", "tabs", "storage", "http://localhost/", "http://*/*"],
+  "homepage_url" : "https://github.com/mochimoshi/tadaima"
+}

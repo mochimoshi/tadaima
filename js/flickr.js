@@ -23,6 +23,8 @@ $(document).ready(function() {
     getIDForUsername($("#flickr-username-input").val());
     $(".settings-body").css("display", "none");
   });
+
+  setInterval(updateClock, 1000);
 });
 
 function getIDForUsername(username) {
@@ -92,14 +94,15 @@ function updateAttribution(photo) {
   var placeID = photo["place_id"];
 
   if (placeID == null) {
-    $(".attribution").html("<p>" + title + " taken by " + owner + "</p>");
+    $(".attribution").html("<p><a href='https://www.flickr.com/photos/" + owner + "/" + photo["id"] + "'>" + title + "</a> taken by <a href='https://www.flickr.com/" + owner + "'>" + owner + "</a></p>");
     return;
   }
 
   var placeIDKey = "placeID~" + placeID;
   chrome.storage.local.get(placeIDKey, function(data) {
     if (data[placeIDKey] != null) {
-      $(".attribution").html("<p>" + title + " taken by " + owner + "</p><p><em>" + place + "</em></p>");
+      var place = data[placeIDKey];
+      $(".attribution").html("<p><a href='https://www.flickr.com/photos/" + owner + "/" + photo["id"] + "'>" + title + "</a> taken by <a href='https://www.flickr.com/" + owner + "'>" + owner + "</a></p><p><em>" + place + "</em></p>");
     } else {
       var method = "flickr.places.getInfo";
       var url = getURLForAPI(method);
@@ -113,7 +116,7 @@ function updateAttribution(photo) {
 
         chrome.storage.local.set(localPlaceStoredObject);
 
-        $(".attribution").html("<p>" + title + " taken by " + owner + "</p><p><em>" + place + "</em></p>");
+        $(".attribution").html("<p><a href='https://www.flickr.com/photos/" + owner + "/" + photo["id"] + "'>" + title + "</a> taken by <a href='https://www.flickr.com/" + owner + "'>" + owner + "</a></p><p><em>" + place + "</em></p>");
       });
     }
   })
@@ -123,3 +126,19 @@ function getURLForAPI(method) {
   var params = ["format=" + format, "api_key=" + flickrKey, "method=" + method, "nojsoncallback=1"];
   return rootURL + params.join("&");
 }
+
+function updateClock() {
+  var currentTime = new Date();
+  var currentHours = currentTime.getHours();
+  var currentMinutes = currentTime.getMinutes();
+  var currentSeconds = currentTime.getSeconds();
+
+  // Pad the minutes and seconds with leading zeros, if required
+  currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
+  currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
+
+  // Compose the string for display
+  var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds;
+  
+  $("#clock").html(currentTimeString);
+ }

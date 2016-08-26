@@ -92,12 +92,35 @@ p {
   padding-right: 16px;
 }
 
+.attribution a:link {
+  color: #3399FF;
+}
+.attribution a:visited {
+  color: #297ACC;
+}
+.attribution a:hover {
+  color: #5CADFF;
+}
+.attribution a:active {
+  color: #5CADFF;
+}
+
+#clock {
+  font-size: 6.5em;
+  font-weight: 300;
+}
+
 /* Overriding styles */
 .pure-menu-link {
   color: #ddd;
 }
 .pure-menu-heading {
   color: #bbb;
+}
+
+.pure-menu-heading h1 {
+  font-weight: 300;
+  font-size: 1.5em;
 }
 
 .pure-menu-active > .pure-menu-link,

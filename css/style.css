@@ -74,7 +74,7 @@ p {
 }
 
 .overlay-bar {
-  background-color: rgba(0,0,0,0.6);
+  background-color: rgba(0,0,0,0.7);
   z-index: 10;
 }
 
@@ -92,16 +92,16 @@ p {
   padding-right: 16px;
 }
 
-.attribution a:link {
+.attribution a:link, .settings-body a:link {
   color: #3399FF;
 }
-.attribution a:visited {
+.attribution a:visited, .settings-body a:visited {
   color: #297ACC;
 }
-.attribution a:hover {
+.attribution a:hover, .settings-body a:hover {
   color: #5CADFF;
 }
-.attribution a:active {
+.attribution a:active, .settings-body a:active {
   color: #5CADFF;
 }
 

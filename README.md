@@ -10,3 +10,7 @@ This has a list of quick links to frequently accessed tools and loads a random p
 * Download / clone this repository somewhere
 * Tap "Load unpacked extension" and select wherever you saved this
 * ただいま
+
+## Acknowledgments
+* [jQuery](https://jquery.com/)
+* [Flickr](https://flickr.com/)

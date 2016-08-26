@@ -107,10 +107,11 @@ function fadeInBackground(photoURL) {
 function updateAttribution(photo) {
   var title = photo["title"]
   var owner = photo["ownername"];
+  var ownerID = photo["owner"];
   var placeID = photo["place_id"];
 
   if (placeID == null) {
-    $(".attribution").html("<p><a href='https://www.flickr.com/photos/" + owner + "/" + photo["id"] + "'>" + title + "</a> taken by <a href='https://www.flickr.com/" + owner + "'>" + owner + "</a></p>");
+    $(".attribution").html("<p><a href='https://www.flickr.com/photos/" + ownerID + "/" + photo["id"] + "'>" + title + "</a> taken by <a href='https://www.flickr.com/" + ownerID + "'>" + owner + "</a></p>");
     return;
   }
 
@@ -118,7 +119,7 @@ function updateAttribution(photo) {
   chrome.storage.local.get(placeIDKey, function(data) {
     if (data[placeIDKey] != null) {
       var place = data[placeIDKey];
-      $(".attribution").html("<p><a href='https://www.flickr.com/photos/" + owner + "/" + photo["id"] + "'>" + title + "</a> taken by <a href='https://www.flickr.com/" + owner + "'>" + owner + "</a></p><p><em>" + place + "</em></p>");
+      $(".attribution").html("<p><a href='https://www.flickr.com/photos/" + ownerID + "/" + photo["id"] + "'>" + title + "</a> taken by <a href='https://www.flickr.com/" + ownerID + "'>" + owner + "</a></p><p><em>" + place + "</em></p>");
     } else {
       var method = "flickr.places.getInfo";
       var url = getURLForAPI(method);
@@ -132,7 +133,7 @@ function updateAttribution(photo) {
 
         chrome.storage.local.set(localPlaceStoredObject);
 
-        $(".attribution").html("<p><a href='https://www.flickr.com/photos/" + owner + "/" + photo["id"] + "'>" + title + "</a> taken by <a href='https://www.flickr.com/" + owner + "'>" + owner + "</a></p><p><em>" + place + "</em></p>");
+        $(".attribution").html("<p><a href='https://www.flickr.com/photos/" + ownerID + "/" + photo["id"] + "'>" + title + "</a> taken by <a href='https://www.flickr.com/" + ownerID + "'>" + owner + "</a></p><p><em>" + place + "</em></p>");
       });
     }
   })

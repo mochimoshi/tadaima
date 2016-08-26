@@ -3,13 +3,15 @@ var format = "json";
 var rootURL = "https://api.flickr.com/services/rest/?";
 
 $(document).ready(function() {
+  setInterval(updateClock, 1000);
+
   chrome.storage.sync.get("flickrUserNSID", function(data) {
     if (data["flickrUserNSID"] != null) {
       updateBackgroundPhoto(data["flickrUserNSID"]);
     } else {
       getIDForUsername("thepianistalex");
     }
-  })
+  });
 
   $("#settings-nav").click(function() {
     $(".settings-body").css("display", "block");
@@ -23,8 +25,6 @@ $(document).ready(function() {
     getIDForUsername($("#flickr-username-input").val());
     $(".settings-body").css("display", "none");
   });
-
-  setInterval(updateClock, 1000);
 });
 
 function getIDForUsername(username) {
@@ -61,23 +61,17 @@ function updateBackgroundPhoto(nsid) {
   chrome.storage.local.get(photosKey, function(data) {
     if (data[photosKey] != null) {
       var photoArray = data[photosKey];
-      var arrayIndex = Math.floor(Math.random() * photoArray.length);
-      var photo = photoArray[arrayIndex];
-      fadeInBackground(photo["url_h"]);
-      updateAttribution(photo);
+      setPhoto(photoArray);
     } else {
       var method = "flickr.people.getPublicPhotos";
       var url = getURLForAPI(method);
 
       url += "&user_id=" + nsid;
-      url += "&per_page=64&extras=url_h,geo,owner_name";
+      url += "&per_page=92&extras=url_h,geo,owner_name";
 
       $.getJSON(url).done(function(data) {
         var photoArray = data["photos"]["photo"];
-        var arrayIndex = Math.floor(Math.random() * photoArray.length);
-        var photo = photoArray[arrayIndex];
-        fadeInBackground(photo["url_h"]);
-        updateAttribution(photo);
+        setPhoto(photoArray);
 
         var localPhotosStoredObject = {};
         localPhotosStoredObject[photosKey] = photoArray;
@@ -86,6 +80,30 @@ function updateBackgroundPhoto(nsid) {
       });
     }
   });
+}
+
+function setPhoto(photoArray) {
+  var retriesLeft = 32
+  var photo = photoArray[0]
+  while(true) {
+    var arrayIndex = Math.floor(Math.random() * photoArray.length);
+    photo = photoArray[arrayIndex];
+
+    var windowWidth = $(window).width();
+    var windowHeight = $(window).height();
+
+    if ((parseInt(photo["width_h"]) <= parseInt(photo["height_h"])) == windowWidth <= windowHeight) {
+      break;
+    }
+
+    retriesLeft--;
+    if (retriesLeft == 0) {
+      break;
+    }
+  }
+
+  fadeInBackground(photo["url_h"]);
+  updateAttribution(photo);
 }
 
 function fadeInBackground(photoURL) {

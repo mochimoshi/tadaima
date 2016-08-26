@@ -63,7 +63,7 @@ function updateBackgroundPhoto(nsid) {
       var photoArray = data[photosKey];
       var arrayIndex = Math.floor(Math.random() * photoArray.length);
       var photo = photoArray[arrayIndex];
-      $("#background-image").attr("src", photo["url_h"]);
+      fadeInBackground(photo["url_h"]);
       updateAttribution(photo);
     } else {
       var method = "flickr.people.getPublicPhotos";
@@ -76,7 +76,7 @@ function updateBackgroundPhoto(nsid) {
         var photoArray = data["photos"]["photo"];
         var arrayIndex = Math.floor(Math.random() * photoArray.length);
         var photo = photoArray[arrayIndex];
-        $("#background-image").attr("src", photo["url_h"]);
+        fadeInBackground(photo["url_h"]);
         updateAttribution(photo);
 
         var localPhotosStoredObject = {};
@@ -86,6 +86,22 @@ function updateBackgroundPhoto(nsid) {
       });
     }
   });
+}
+
+function fadeInBackground(photoURL) {
+  $("#background-image").fadeOut(1000, function() {
+    $("#background-image").remove();
+
+    var img = new Image();
+    img.style.display = "none";
+    img.onload = function() {
+      $(this).fadeIn(1000);
+    };
+    img.setAttribute("id", "background-image");
+    $(".fade-in-image").append(img);
+    img.src = photoURL
+  });
+  
 }
 
 function updateAttribution(photo) {

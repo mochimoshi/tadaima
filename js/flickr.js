@@ -76,7 +76,7 @@ function updateBackgroundPhoto(nsid) {
       var url = getURLForAPI(method);
 
       url += "&user_id=" + nsid;
-      url += "&per_page=92&extras=url_h,geo,owner_name";
+      url += "&per_page=92&extras=url_h,url_o,geo,owner_name";
 
       $.getJSON(url).done(function(flickrData) {
         var photoArray = flickrData["photos"]["photo"];
@@ -106,8 +106,14 @@ function setPhoto(photoArray) {
     var windowWidth = $(window).width();
     var windowHeight = $(window).height();
 
-    if ((parseInt(photo["width_h"]) <= parseInt(photo["height_h"])) == windowWidth <= windowHeight) {
-      break;
+    if (photo["url_h"] != null) {
+      if ((parseInt(photo["width_h"]) <= parseInt(photo["height_h"])) == windowWidth <= windowHeight) {
+        break;
+      }
+    } else {
+      if ((parseInt(photo["width_o"]) <= parseInt(photo["height_o"])) == windowWidth <= windowHeight) {
+        break;
+      }
     }
 
     retriesLeft--;
@@ -116,7 +122,11 @@ function setPhoto(photoArray) {
     }
   }
 
-  fadeInBackground(photo["url_h"]);
+  if (photo["url_h"] != null) {
+    fadeInBackground(photo["url_h"]);
+  } else {
+    fadeInBackground(photo["url_o"]);
+  }
   updateAttribution(photo);
 }
 

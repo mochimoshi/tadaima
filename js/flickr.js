@@ -2,6 +2,9 @@ var flickrKey = "ff97f4120c66e9295f2c4189b783e5ab";
 var format = "json";
 var rootURL = "https://api.flickr.com/services/rest/?";
 
+var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
 $(document).ready(function() {
   setInterval(updateClock, 1000);
 
@@ -187,4 +190,11 @@ function updateClock() {
   var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds;
   
   $("#clock").html(currentTimeString);
+
+  var month = months[currentTime.getMonth()];
+  var day = days[currentTime.getDay()];
+  var date = currentTime.getDate();
+
+  var currentDateString = day + ", " + month + " " + date
+  $("#date").html(currentDateString);
  }

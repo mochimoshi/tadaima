@@ -110,6 +110,11 @@ p {
   font-weight: 300;
 }
 
+#date {
+  font-size: 2.4em;
+  font-weight: 300;
+}
+
 /* Overriding styles */
 .pure-menu-link {
   color: #ddd;

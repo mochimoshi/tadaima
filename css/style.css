@@ -131,7 +131,7 @@ p {
 .pure-menu-active > .pure-menu-link,
 .pure-menu-link:hover,
 .pure-menu-link:focus {
-  background-color: rgba(50,50,50,0.7);
+  background-color: rgba(72,72,72,0.8);
 }
 
 .pure-menu-selected .pure-menu-link,

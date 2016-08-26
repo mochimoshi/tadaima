@@ -33,6 +33,7 @@ function getIDForUsername(username) {
   chrome.storage.local.get(usernameKey, function(data) {
     if (data[usernameKey] != null) {
       updateBackgroundPhoto(data[usernameKey]);
+      chrome.storage.sync.set({"flickrUsername": username});
     } else {
       var method = "flickr.people.findByUsername";
       var url = getURLForAPI(method);

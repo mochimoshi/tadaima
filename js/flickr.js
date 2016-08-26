@@ -57,10 +57,12 @@ function getIDForUsername(username) {
 
 function updateBackgroundPhoto(nsid) {
   var photosKey = "photos~" + nsid;
+  var currentTime = new Date().getTime() / 1000;
+  var twoDays = 2 * 24 * 60 * 60;
 
   chrome.storage.local.get(photosKey, function(data) {
-    if (data[photosKey] != null) {
-      var photoArray = data[photosKey];
+    if (data[photosKey] != null && data[photosKey]["setAt"] + twoDays > currentTime) {
+      var photoArray = data[photosKey]["photoArray"];
       setPhoto(photoArray);
     } else {
       var method = "flickr.people.getPublicPhotos";
@@ -69,12 +71,17 @@ function updateBackgroundPhoto(nsid) {
       url += "&user_id=" + nsid;
       url += "&per_page=92&extras=url_h,geo,owner_name";
 
-      $.getJSON(url).done(function(data) {
-        var photoArray = data["photos"]["photo"];
+      $.getJSON(url).done(function(flickrData) {
+        var photoArray = flickrData["photos"]["photo"];
         setPhoto(photoArray);
 
         var localPhotosStoredObject = {};
-        localPhotosStoredObject[photosKey] = photoArray;
+        var photosInformation = {};
+
+        photosInformation["photoArray"] = photoArray;
+        photosInformation["setAt"] = currentTime;
+
+        localPhotosStoredObject[photosKey] = photosInformation;
 
         chrome.storage.local.set(localPhotosStoredObject);
       });

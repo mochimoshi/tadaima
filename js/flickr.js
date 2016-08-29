@@ -5,7 +5,10 @@ var rootURL = "https://api.flickr.com/services/rest/?";
 var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
+var sortable;
+
 $(document).ready(function() {
+  updateClock()
   setInterval(updateClock, 1000);
 
   chrome.storage.sync.get("storedFormattedLinks", function(links) {
@@ -25,19 +28,19 @@ $(document).ready(function() {
   });
 
   $("#save-settings").click(function(e) {
-    e.preventDefault;
+    e.stopImmediatePropagation();
     saveLinks();
     getIDForUsername($("#flickr-username-input").val());
     $(".settings-body").css("display", "none");
   });
 
   $("#add-heading").click(function(e) {
-    e.preventDefault;
+    e.stopImmediatePropagation();
     addHeadingSettingsLink();
   });
 
   $("#add-link").click(function(e) {
-    e.preventDefault;
+    e.stopImmediatePropagation();
     addLinkSettingsLink();
   });
 });
@@ -118,7 +121,8 @@ function loadCustomLinks(links) {
   var settings = '<li class="pure-menu-item"><a href="#"" class="pure-menu-link" id="settings-nav">Settings</a></li>'
   $(".pure-menu-list").append(settings)
 
-  $("#settings-nav").click(function() {
+  $("#settings-nav").click(function(e) {
+    e.stopImmediatePropagation();
     $(".settings-body").css("display", "block");
     chrome.storage.sync.get("flickrUsername", function(data) {
       $("#flickr-username-input").val(data["flickrUsername"]);
@@ -353,25 +357,28 @@ function setupSettingsLinks(links) {
     $("#link-items").append(createLinkField(link, i));
   }
 
-  Sortable.create($("#link-items")[0]);
+  sortable = Sortable.create($("#link-items")[0], {
+    animation: 150,
+    filter: '.delete-link-link, input'
+  });
 
   $(".delete-link-link").click(function(e) {
-    e.preventDefault;
+    e.stopImmediatePropagation();
     deleteLink($(this).parent());
   });
 }
 
-function getCurrentSettingsLinkCount() {
-  return $("#link-items").children().length
+function generateLinkID() {
+  return new Date().getTime();
 }
 
 function addHeadingSettingsLink() {
-  var headingHTML = createLinkField({"type": "heading", "name": ""}, getCurrentSettingsLinkCount());
+  var headingHTML = createLinkField({"type": "heading", "name": ""}, generateLinkID());
   $("#link-items").append(headingHTML);
 }
 
 function addLinkSettingsLink() {
-  var linkHTML = createLinkField({"type": "link", "name": "", "link": ""}, getCurrentSettingsLinkCount());
+  var linkHTML = createLinkField({"type": "link", "name": "", "link": ""}, generateLinkID());
   $("#link-items").append(linkHTML);
 }
 

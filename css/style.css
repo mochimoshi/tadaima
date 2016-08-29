@@ -58,6 +58,8 @@ label {
 .settings-list-item {
   padding-bottom: 0.125em;
   padding-top: 0.125em;
+  cursor: move;
+  cursor: -webkit-grabbing;
 }
 
 .modal-heading {

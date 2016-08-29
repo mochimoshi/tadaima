@@ -31,6 +31,16 @@ $(document).ready(function() {
     getIDForUsername($("#flickr-username-input").val());
     $(".settings-body").css("display", "none");
   });
+
+  $("#add-heading").click(function(e) {
+    e.preventDefault;
+    addHeadingSettingsLink();
+  });
+
+  $("#add-link").click(function(e) {
+    e.preventDefault;
+    addLinkSettingsLink();
+  });
 });
 
 function getIDForUsername(username) {
@@ -221,22 +231,57 @@ function setupSettingsLinks(links) {
     if (link.name == "Settings") {
       continue;
     }
+    
+    $("#link-items").append(createLinkField(link, i));
+  }
 
-    if (link.type == "heading") {
+  $(".delete-link-link").click(function(e) {
+    e.preventDefault;
+    deleteLink($(this).parent());
+  });
+}
+
+function getCurrentSettingsLinkCount() {
+  return $("#link-items").children().length
+}
+
+function addHeadingSettingsLink() {
+  var headingHTML = createLinkField({"type": "heading", "name": ""}, getCurrentSettingsLinkCount());
+  $("#link-items").append(headingHTML);
+}
+
+function addLinkSettingsLink() {
+  var linkHTML = createLinkField({"type": "link", "name": "", "link": ""}, getCurrentSettingsLinkCount());
+  $("#link-items").append(linkHTML);
+}
+
+function deleteLink(linkElement) {
+  var linkElements = linkElement.attr("id").split("-");
+  var linkID = linkElements[linkElements.length - 1];
+
+  $("#settings-list-item-" + linkID).remove();
+}
+
+function createLinkField(link, index) {
+  var linkType = "";
+  var inputText = "";
+
+  if (link.type == "heading") {
       linkType = 'Header'
-      inputText = '<div class="pure-u-3-4"><input id="settings-link-' + i + '" value="' + link.name + '" class="pure-u-1"></div>'
+      inputText = '<div class="pure-u-3-4"><input id="settings-link-' + index + '" value="' + link.name + '" class="pure-u-1"></div>'
     } else {
       linkType = 'Link'
-      inputText = '<div class="pure-u-1-3"><input id="settings-link-' + i + '" value="' + link.name + '" class="pure-u-23-24"></div> \
-        <div class="pure-u-5-12"><input id="settings-link-url-' + i + '" value="' + link.link + '" class="pure-u-1"></div>'
+      inputText = '<div class="pure-u-1-3"><input id="settings-link-' + index + '" value="' + link.name + '" class="pure-u-23-24"></div> \
+        <div class="pure-u-5-12"><input id="settings-link-url-' + index + '" value="' + link.link + '" class="pure-u-1"></div>'
     }
-    $("#link-items").append('<li class="settings-list-item"> \
+
+    var html = '<li class="settings-list-item" id="settings-list-item-' + index + '"> \
       <div class="pure-g"> \
         <div class="pure-u-1-6"><div class="settings-link-type pure-u-11-12">' + linkType + '</div></div> \
         ' + inputText + ' \
-        <div id="settings-delete-' + i + '" class="delete-link pure-u-1-12"><a href="#">X</a></div>\
-      </div></li>');
-  }
+        <div id="settings-delete-' + index + '" class="delete-link pure-u-1-12"><a href="#" class="delete-link-link">X</a></div> \
+      </div></li>';
+    return html;
 }
 
 function getURLForAPI(method) {

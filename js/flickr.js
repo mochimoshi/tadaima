@@ -21,6 +21,9 @@ $(document).ready(function() {
     chrome.storage.sync.get("flickrUsername", function(data) {
       $("#flickr-username-input").val(data["flickrUsername"]);
     });
+
+    var links = processCurrentLinks();
+    setupSettingsLinks(links);
   });
 
   $("#save-settings").click(function(e) {
@@ -179,6 +182,61 @@ function updateAttribution(photo) {
       });
     }
   })
+}
+
+function saveLinks() {
+
+}
+
+function processCurrentLinks() {
+  var linkElements = [];
+  var links = $("#favorite-links").children();
+
+  for (var i = 0; i < links.length; i++) {
+    var formattedElement = {};
+    var element = $(links[i]);
+    if (element.attr("class") == "pure-menu-heading") {
+      formattedElement["type"] = "heading";
+      formattedElement["name"] = element.text();
+    } else {
+      formattedElement["type"] = "link";
+      var innerLink = $(element.children("a")[0]);
+      formattedElement["link"] = innerLink.attr("href");
+      formattedElement["name"] = innerLink.text();
+    }
+
+    linkElements[linkElements.length] = formattedElement;
+  }
+
+  return linkElements;
+}
+
+function setupSettingsLinks(links) {
+  $("#link-items").text("");
+  for(var i = 0; i < links.length; i++) {
+    var link = links[i];
+    var linkType = "";
+    var inputText = "";
+
+    if (link.name == "Settings") {
+      continue;
+    }
+
+    if (link.type == "heading") {
+      linkType = 'Header'
+      inputText = '<div class="pure-u-3-4"><input id="settings-link-' + i + '" value="' + link.name + '" class="pure-u-1"></div>'
+    } else {
+      linkType = 'Link'
+      inputText = '<div class="pure-u-1-3"><input id="settings-link-' + i + '" value="' + link.name + '" class="pure-u-23-24"></div> \
+        <div class="pure-u-5-12"><input id="settings-link-url-' + i + '" value="' + link.link + '" class="pure-u-1"></div>'
+    }
+    $("#link-items").append('<li class="settings-list-item"> \
+      <div class="pure-g"> \
+        <div class="pure-u-1-6"><div class="settings-link-type pure-u-11-12">' + linkType + '</div></div> \
+        ' + inputText + ' \
+        <div id="settings-delete-' + i + '" class="delete-link pure-u-1-12"><a href="#">X</a></div>\
+      </div></li>');
+  }
 }
 
 function getURLForAPI(method) {

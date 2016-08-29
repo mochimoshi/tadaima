@@ -20,6 +20,10 @@ p {
   font-size: 1.125em;
 }
 
+label {
+  text-align: left;
+}
+
 .full-height {
   position: absolute;
   top: 0;
@@ -30,8 +34,9 @@ p {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translateX(-50%) translateY(-50%);
   text-align: center;
+  width: 33%;
+  transform: translateX(-14%) translateY(-50%);
 }
 
 .main-body {
@@ -40,9 +45,64 @@ p {
 
 .settings-body {
   z-index: 4;
-  background-color: rgba(0,0,0,0.6);
+  background-color: rgba(0,0,0,0.8);
   padding: 16px;
   display: none;
+}
+
+#link-items {
+  text-align: left;
+  list-style-type: none;
+}
+
+.settings-list-item {
+  padding-bottom: 0.125em;
+  padding-top: 0.125em;
+}
+
+.modal-heading {
+  font-size: 2.4em;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.modal-secondary-heading {
+  font-size: 1.25em;
+  margin-top: 0.125em;
+  margin-bottom: 0.125em;
+}
+
+.delete-link {
+  text-align: center;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.delete-link a:link {
+  text-decoration: none;
+}
+
+.delete-link a:visited {
+  text-decoration: none;
+}
+
+.delete-link a:hover {
+  text-decoration: none;
+}
+
+.delete-link a:active {
+  text-decoration: none;
+}
+
+#settings-submit-button {
+  padding-top: 0.25em;
+  padding-bottom: 0.125em;
+}
+
+.settings-link-type {
+  font-weight: 400;
+  text-align: right;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .index-background {
@@ -105,16 +165,6 @@ p {
   color: #5CADFF;
 }
 
-#clock {
-  font-size: 6.5em;
-  font-weight: 300;
-}
-
-#date {
-  font-size: 2.4em;
-  font-weight: 300;
-}
-
 /* Overriding styles */
 .pure-menu-link {
   color: #ddd;
@@ -141,4 +191,55 @@ p {
 
 .pure-form legend {
   color: #bbb;
+}
+
+.pure-form select {
+  color: #111;
+}
+
+.pure-form input {
+  color: #111;
+}
+
+/* Media Queries */
+/* Small */
+@media screen and (min-width:35.5em) {
+  .centered-body {
+    width: 40%;
+    transform: translateX(-13%) translateY(-50%);
+  }
+
+  #clock {
+    font-size: 2.4em;
+  }
+
+  #date, #motivational-quote {
+    font-size: 1.25em;
+  }
+
+  .modal-heading {
+    margin-top: 0.125em;
+    margin-bottom: 0.125em;
+    font-size: 1.25em;
+  }
+}
+
+/* Medium + */
+@media screen and (min-width:48em) {
+  .centered-body {
+    width: 48%;
+    transform: translateX(-33%) translateY(-50%);
+  }
+
+  #clock {
+    font-size: 6.5em;
+  }
+
+  #date, #motivational-quote {
+    font-size: 2.4em;
+  }
+
+  .modal-heading {
+    font-size: 2.4em;
+  }
 }

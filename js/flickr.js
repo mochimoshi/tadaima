@@ -293,16 +293,18 @@ function saveLinks() {
 
   for (var i = 0; i < links.length; i++) {
     var element = $(links[i]);
+    var elementIDComponents = element.attr("id").split("-");
+    var elementIndex = elementIDComponents[elementIDComponents.length - 1];
 
     var type = $(element.find(".settings-link-type")[0]).text();
 
     if (type == "Header") {
-      var headerName = $(element.find("#settings-link-" + i)[0]).val();
+      var headerName = $(element.find("#settings-link-" + elementIndex)[0]).val();
       var formattedLink = {"type": "header", "name": headerName};
       formattedLinks[formattedLinks.length] = formattedLink
     } else {
-      var linkName = $(element.find("#settings-link-" + i)[0]).val();
-      var url = $(element.find("#settings-link-url-" + i)[0]).val();
+      var linkName = $(element.find("#settings-link-" + elementIndex)[0]).val();
+      var url = $(element.find("#settings-link-url-" + elementIndex)[0]).val();
       var formattedLink = {"type": "link", "name": linkName, "url": url};
       formattedLinks[formattedLinks.length] = formattedLink
     }
@@ -350,6 +352,8 @@ function setupSettingsLinks(links) {
     
     $("#link-items").append(createLinkField(link, i));
   }
+
+  Sortable.create($("#link-items")[0]);
 
   $(".delete-link-link").click(function(e) {
     e.preventDefault;

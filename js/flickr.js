@@ -8,6 +8,14 @@ var months = ["January", "February", "March", "April", "May", "June", "July", "A
 $(document).ready(function() {
   setInterval(updateClock, 1000);
 
+  chrome.storage.sync.get("storedFormattedLinks", function(links) {
+    if (links["storedFormattedLinks"] != null) {
+      loadCustomLinks(links["storedFormattedLinks"]);
+    } else {
+      loadDefaultLinks();
+    }
+  });
+
   chrome.storage.sync.get("flickrUserNSID", function(data) {
     if (data["flickrUserNSID"] != null) {
       updateBackgroundPhoto(data["flickrUserNSID"]);
@@ -16,18 +24,9 @@ $(document).ready(function() {
     }
   });
 
-  $("#settings-nav").click(function() {
-    $(".settings-body").css("display", "block");
-    chrome.storage.sync.get("flickrUsername", function(data) {
-      $("#flickr-username-input").val(data["flickrUsername"]);
-    });
-
-    var links = processCurrentLinks();
-    setupSettingsLinks(links);
-  });
-
   $("#save-settings").click(function(e) {
     e.preventDefault;
+    saveLinks();
     getIDForUsername($("#flickr-username-input").val());
     $(".settings-body").css("display", "none");
   });
@@ -42,6 +41,101 @@ $(document).ready(function() {
     addLinkSettingsLink();
   });
 });
+
+function loadDefaultLinks() {
+  var defaultLinks = [
+    {
+      "type": "header",
+      "name": "Quick Links"  
+    },
+    {
+      "type": "link",
+      "name": "Google",
+      "url": "https://google.com"
+    },
+    {
+      "type": "link",
+      "name": "Mail",
+      "url": "https://gmail.com"
+    },
+    {
+      "type": "link",
+      "name": "Maps",
+      "url": "https://maps.google.com"
+    },
+    {
+      "type": "link",
+      "name": "Calendar",
+      "url": "https://calendar.google.com"
+    },
+    {
+      "type": "link",
+      "name": "Drive",
+      "url": "https://drive.google.com"
+    },
+    {
+      "type": "header",
+      "name": "Work"
+    },
+    {
+      "type": "link",
+      "name": "GitHub",
+      "url": "https://github.com"
+    },
+    {
+      "type": "link",
+      "name": "Coursera",
+      "url": "https://coursera.org"
+    },
+    {
+      "type": "header",
+      "name": "Other"
+    },
+    {
+      "type": "link",
+      "name": "Messenger",
+      "url": "https://messenger.com"
+    },
+    {
+      "type": "link",
+      "name": "Flickr",
+      "url": "https://flickr.com"
+    }
+  ];
+
+  loadCustomLinks(defaultLinks);
+}
+
+function loadCustomLinks(links) {
+  $(".pure-menu-list").text("");
+  for (var i = 0; i < links.length; i++) {
+    var link = links[i];
+    var html = createLinkHTML(link);
+    
+    $(".pure-menu-list").append(html);
+  }
+
+  var settings = '<li class="pure-menu-item"><a href="#"" class="pure-menu-link" id="settings-nav">Settings</a></li>'
+  $(".pure-menu-list").append(settings)
+
+  $("#settings-nav").click(function() {
+    $(".settings-body").css("display", "block");
+    chrome.storage.sync.get("flickrUsername", function(data) {
+      $("#flickr-username-input").val(data["flickrUsername"]);
+    });
+
+    var links = processCurrentLinks();
+    setupSettingsLinks(links);
+  });
+}
+
+function createLinkHTML(link) {
+  if (link.type == "header") {
+    return '<li class="pure-menu-heading">' + link.name + '</li>'
+  } else {
+    return '<li class="pure-menu-item"><a href="' + link.url + '" class="pure-menu-link">' + link.name + '</a></li>'
+  }
+}
 
 function getIDForUsername(username) {
   var usernameKey = "username~" + username
@@ -156,7 +250,6 @@ function fadeInBackground(photoURL) {
     $(".fade-in-image").append(img);
     img.src = photoURL
   });
-  
 }
 
 function updateAttribution(photo) {
@@ -195,7 +288,30 @@ function updateAttribution(photo) {
 }
 
 function saveLinks() {
+  var formattedLinks = [];
+  var links = $("#link-items").children();
 
+  for (var i = 0; i < links.length; i++) {
+    var element = $(links[i]);
+
+    var type = $(element.find(".settings-link-type")[0]).text();
+
+    if (type == "Header") {
+      var headerName = $(element.find("#settings-link-" + i)[0]).val();
+      var formattedLink = {"type": "header", "name": headerName};
+      formattedLinks[formattedLinks.length] = formattedLink
+    } else {
+      var linkName = $(element.find("#settings-link-" + i)[0]).val();
+      var url = $(element.find("#settings-link-url-" + i)[0]).val();
+      var formattedLink = {"type": "link", "name": linkName, "url": url};
+      formattedLinks[formattedLinks.length] = formattedLink
+    }
+  }
+
+  var storedFormattedLinks = {"storedFormattedLinks": formattedLinks}
+  chrome.storage.sync.set(storedFormattedLinks);
+
+  loadCustomLinks(formattedLinks);
 }
 
 function processCurrentLinks() {

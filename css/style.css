@@ -45,7 +45,8 @@ label {
 
 .settings-body {
   z-index: 4;
-  background-color: rgba(0,0,0,0.8);
+  background-color: black;
+  opacity: 0.8;
   padding: 16px;
   display: none;
 }
@@ -131,6 +132,15 @@ label {
 }
 
 .vertical-padded-wrapper {
+  background-color: black;
+  opacity: 0.8;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
   padding-top: 32px;
   padding-bottom: 32px;
 }
@@ -146,8 +156,6 @@ label {
 
 .attribution {
   font-size: 0.8em;
-  position: absolute;
-  bottom: 0;
   padding-bottom: 8px;
   padding-top: 8px;
   padding-left: 16px;
